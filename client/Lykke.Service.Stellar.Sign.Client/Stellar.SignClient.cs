@@ -3,11 +3,11 @@ using Common.Log;
 
 namespace Lykke.Service.Stellar.Sign.Client
 {
-    public class Stellar.SignClient : IStellar.SignClient, IDisposable
+    public class StellarSignClient : IStellarSignClient, IDisposable
     {
         private readonly ILog _log;
 
-        public Stellar.SignClient(string serviceUrl, ILog log)
+        public StellarSignClient(string serviceUrl, ILog log)
         {
             _log = log;
         }

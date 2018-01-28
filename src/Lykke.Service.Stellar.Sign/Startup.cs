@@ -50,7 +50,7 @@ namespace Lykke.Service.Stellar.Sign
 
                 services.AddSwaggerGen(options =>
                 {
-                    options.DefaultLykkeConfiguration("v1", "Stellar.Sign API");
+                    options.DefaultLykkeConfiguration("v1", "StellarSign API");
                 });
 
                 var builder = new ContainerBuilder();
@@ -58,7 +58,7 @@ namespace Lykke.Service.Stellar.Sign
 
                 Log = CreateLogWithSlack(services, appSettings);
 
-                builder.RegisterModule(new ServiceModule(appSettings.Nested(x => x.Stellar.SignService), Log));
+                builder.RegisterModule(new ServiceModule(appSettings.Nested(x => x.StellarSignService), Log));
                 builder.Populate(services);
                 ApplicationContainer = builder.Build();
 
@@ -81,7 +81,7 @@ namespace Lykke.Service.Stellar.Sign
                 }
 
                 app.UseLykkeForwardedHeaders();
-                app.UseLykkeMiddleware("Stellar.Sign", ex => new { Message = "Technical problem" });
+                app.UseLykkeMiddleware("StellarSign", ex => new { Message = "Technical problem" });
 
                 app.UseMvc();
                 app.UseSwagger(c =>
@@ -172,7 +172,7 @@ namespace Lykke.Service.Stellar.Sign
 
             aggregateLogger.AddLog(consoleLogger);
 
-            var dbLogConnectionStringManager = settings.Nested(x => x.Stellar.SignService.Db.LogsConnString);
+            var dbLogConnectionStringManager = settings.Nested(x => x.StellarSignService.Db.LogsConnString);
             var dbLogConnectionString = dbLogConnectionStringManager.CurrentValue;
 
             if (string.IsNullOrEmpty(dbLogConnectionString))
@@ -185,7 +185,7 @@ namespace Lykke.Service.Stellar.Sign
                 throw new InvalidOperationException($"LogsConnString {dbLogConnectionString} is not filled in settings");
 
             var persistenceManager = new LykkeLogToAzureStoragePersistenceManager(
-                AzureTableStorage<LogEntity>.Create(dbLogConnectionStringManager, "Stellar.SignLog", consoleLogger),
+                AzureTableStorage<LogEntity>.Create(dbLogConnectionStringManager, "StellarSignLog", consoleLogger),
                 consoleLogger);
 
             // Creating slack notification service, which logs own azure queue processing messages to aggregate log

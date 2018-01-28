@@ -1,5 +1,5 @@
 ﻿{
-  "Stellar.SignService": {
+  "StellarSignService": {
     "Db": {
       "LogsConnString": "UseDevelopmentStorage=true"
     }

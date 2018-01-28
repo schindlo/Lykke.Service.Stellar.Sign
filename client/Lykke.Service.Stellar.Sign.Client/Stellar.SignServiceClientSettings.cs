@@ -2,7 +2,7 @@ using System;
 
 namespace Lykke.Service.Stellar.Sign.Client 
 {
-    public class Stellar.SignServiceClientSettings 
+    public class StellarSignServiceClientSettings 
     {
         public string ServiceUrl {get; set;}
     }

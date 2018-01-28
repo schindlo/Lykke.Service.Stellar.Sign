@@ -11,12 +11,12 @@ namespace Lykke.Service.Stellar.Sign.Modules
 {
     public class ServiceModule : Module
     {
-        private readonly IReloadingManager<Stellar.SignSettings> _settings;
+        private readonly IReloadingManager<StellarSignSettings> _settings;
         private readonly ILog _log;
         // NOTE: you can remove it if you don't need to use IServiceCollection extensions to register service specific dependencies
         private readonly IServiceCollection _services;
 
-        public ServiceModule(IReloadingManager<Stellar.SignSettings> settings, ILog log)
+        public ServiceModule(IReloadingManager<StellarSignSettings> settings, ILog log)
         {
             _settings = settings;
             _log = log;
