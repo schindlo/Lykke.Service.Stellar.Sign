@@ -46,7 +46,9 @@ namespace Lykke.Service.Stellar.Sign.Modules
             builder.RegisterType<ShutdownManager>()
                 .As<IShutdownManager>();
 
-            // TODO: Add your dependencies here
+            builder.RegisterType<StellarService>()
+                   .As<IStellarService>()
+                   .SingleInstance();
 
             builder.Populate(_services);
         }
