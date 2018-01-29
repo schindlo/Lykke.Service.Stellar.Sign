@@ -1,8 +1,8 @@
-﻿using Lykke.Service.Stellar.Sign.Core.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
-namespace Lykke.Service.Stellar.Sign.Models
+
+namespace Lykke.Service.Stellar.Sign.Controllers
 {
     [Route("api/wallets")]
     public class WalletsController : Controller
@@ -17,13 +17,12 @@ namespace Lykke.Service.Stellar.Sign.Models
         [HttpPost]
         public WalletResponse Post()
         {
-            var privateKey = _stellarService.GetPrivateKey();
-            var publicAddress = _stellarService.GetPublicAddress(privateKey);
+            var keyPair = _stellarService.GenerateKeyPair();
 
-            return new WalletResponse()
+            return new WalletResponse
             {
-                PrivateKey = privateKey,
-                PublicAddress = publicAddress
+                PrivateKey = keyPair.Seed,
+                PublicAddress = keyPair.Address
             };
         }
     }

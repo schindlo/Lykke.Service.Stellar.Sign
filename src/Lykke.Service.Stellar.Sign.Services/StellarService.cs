@@ -8,7 +8,11 @@ namespace Lykke.Service.Stellar.Sign.Services
     {
         public KeyPair GenerateKeyPair()
         {
-            throw new NotImplementedException();
+            return new KeyPair
+            {
+                Seed = "seed",
+                Address = "address"
+            };
         }
     }
 }

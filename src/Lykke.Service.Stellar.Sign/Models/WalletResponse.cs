@@ -1,6 +1,6 @@
 ﻿namespace Lykke.Service.Stellar.Sign.Models
 {
-    public class WalletModels
+    public class WalletResponse
     {
         public string PrivateKey { get; set; }
 
