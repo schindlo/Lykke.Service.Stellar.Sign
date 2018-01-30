@@ -6,6 +6,6 @@ namespace Lykke.Service.Stellar.Sign.Core.Services
     {
         KeyPair GenerateKeyPair();
 
-        string SignTransaction(string[] seeds, string xdr);
+        string SignTransaction(string[] seeds, string xdrBase64);
     }
 }
