@@ -8,9 +8,9 @@ namespace Lykke.Service.Stellar.Sign.Services
 {
     public class StellarService: IStellarService
     {
-        public StellarService()
+        public StellarService(string network)
         {
-            StellarBase.Network.CurrentNetwork = "Test SDF Network ; September 2015";
+            StellarBase.Network.CurrentNetwork = network;
         }
 
         public KeyPair GenerateKeyPair()
