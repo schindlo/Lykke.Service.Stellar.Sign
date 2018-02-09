@@ -1,7 +1,6 @@
 ﻿using System;
-using StellarBase = Stellar;
-using StellarGenerated = Stellar.Generated;
-using Lykke.Service.Stellar.Sign.Core.Domain.Stellar;
+using StellarBase;
+using StellarBase.Generated;
 using Lykke.Service.Stellar.Sign.Core.Services;
 
 namespace Lykke.Service.Stellar.Sign.Services
@@ -10,13 +9,13 @@ namespace Lykke.Service.Stellar.Sign.Services
     {
         public StellarService(string network)
         {
-            StellarBase.Network.CurrentNetwork = network;
+            Network.CurrentNetwork = network;
         }
 
-        public KeyPair GenerateKeyPair()
+        public Core.Domain.Stellar.KeyPair GenerateKeyPair()
         {
-            var keyPair = StellarBase.KeyPair.Random();
-            return new KeyPair
+            var keyPair = KeyPair.Random();
+            return new Core.Domain.Stellar.KeyPair
             {
                 Seed = keyPair.Seed,
                 Address = keyPair.Address
@@ -27,46 +26,46 @@ namespace Lykke.Service.Stellar.Sign.Services
         {
             var xdr = Convert.FromBase64String(xdrBase64);
 
-            var reader = new StellarGenerated.ByteReader(xdr);
-            var tx = StellarGenerated.Transaction.Decode(reader);
+            var reader = new ByteReader(xdr);
+            var tx = StellarBase.Generated.Transaction.Decode(reader);
             var txHash = GetTransactionHash(tx);
 
-            var signer = StellarBase.KeyPair.FromSeed(seeds[0]);
+            var signer = KeyPair.FromSeed(seeds[0]);
             var signature = signer.SignDecorated(txHash);
 
             var signedTx = CreateEnvelopeXdrBase64(tx, signature);
             return signedTx;
         }
 
-        private byte[] GetTransactionHash(StellarGenerated.Transaction tx)
+        private byte[] GetTransactionHash(StellarBase.Generated.Transaction tx)
         {
-            var writer = new StellarGenerated.ByteWriter();
+            var writer = new ByteWriter();
 
             // Hashed NetworkID
-            writer.Write(StellarBase.Network.CurrentNetworkId);
+            writer.Write(Network.CurrentNetworkId);
 
             // Envelope Type - 4 bytes
-            StellarGenerated.EnvelopeType.Encode(writer, StellarGenerated.EnvelopeType.Create(StellarGenerated.EnvelopeType.EnvelopeTypeEnum.ENVELOPE_TYPE_TX));
+            EnvelopeType.Encode(writer, EnvelopeType.Create(EnvelopeType.EnvelopeTypeEnum.ENVELOPE_TYPE_TX));
 
             // Transaction XDR bytes
-            var txWriter = new StellarGenerated.ByteWriter();
-            StellarGenerated.Transaction.Encode(txWriter, tx);
+            var txWriter = new ByteWriter();
+            StellarBase.Generated.Transaction.Encode(txWriter, tx);
             writer.Write(txWriter.ToArray());
 
             var data = writer.ToArray();
             return StellarBase.Utilities.Hash(data);
         }
 
-        private string CreateEnvelopeXdrBase64(StellarGenerated.Transaction tx, StellarGenerated.DecoratedSignature signature)
+        private string CreateEnvelopeXdrBase64(StellarBase.Generated.Transaction tx, DecoratedSignature signature)
         {
-            var txEnvelope = new StellarGenerated.TransactionEnvelope
+            var txEnvelope = new TransactionEnvelope
             {
                 Tx = tx,
                 Signatures = new [] { signature }
             };
 
-            var writer = new StellarGenerated.ByteWriter();
-            StellarGenerated.TransactionEnvelope.Encode(writer, txEnvelope);
+            var writer = new ByteWriter();
+            TransactionEnvelope.Encode(writer, txEnvelope);
             var data = writer.ToArray();
             return Convert.ToBase64String(data);
         }
