@@ -5,7 +5,7 @@ using Lykke.Service.Stellar.Sign.Core.Services;
 
 namespace Lykke.Service.Stellar.Sign.Services
 {
-    public class StellarService: IStellarService
+    public class StellarService : IStellarService
     {
         public StellarService(string network)
         {
@@ -53,7 +53,7 @@ namespace Lykke.Service.Stellar.Sign.Services
             writer.Write(txWriter.ToArray());
 
             var data = writer.ToArray();
-            return StellarBase.Utilities.Hash(data);
+            return Utilities.Hash(data);
         }
 
         private string CreateEnvelopeXdrBase64(StellarBase.Generated.Transaction tx, DecoratedSignature signature)
@@ -61,7 +61,7 @@ namespace Lykke.Service.Stellar.Sign.Services
             var txEnvelope = new TransactionEnvelope
             {
                 Tx = tx,
-                Signatures = new [] { signature }
+                Signatures = new[] { signature }
             };
 
             var writer = new ByteWriter();

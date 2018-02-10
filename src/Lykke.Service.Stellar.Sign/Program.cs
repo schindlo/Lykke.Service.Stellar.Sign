@@ -24,7 +24,7 @@ namespace Lykke.Service.Stellar.Sign
             {
                 var host = new WebHostBuilder()
                     .UseKestrel()
-                    .UseUrls(new []{ "http://*:5000", "http://localhost:5000" })
+                    .UseUrls(new[] { "http://*:5000" })
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseStartup<Startup>()
                     .UseApplicationInsights()
