@@ -2,7 +2,8 @@
   "StellarSignService": {
     "Db": {
       "LogsConnString": "UseDevelopmentStorage=true"
-    }
+    },
+    "NetworkPassphrase": "Test SDF Network ; September 2015"
   },
   "SlackNotifications": {
     "AzureQueue": {
