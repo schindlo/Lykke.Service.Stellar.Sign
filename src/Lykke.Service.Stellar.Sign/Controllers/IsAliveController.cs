@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Lykke.Service.Stellar.Sign.Controllers
 {
     // NOTE: See https://lykkex.atlassian.net/wiki/spaces/LKEWALLET/pages/35755585/Add+your+app+to+Monitoring
-    [Route("api/[controller]")]
+    [Route("api/isalive")]
     public class IsAliveController : Controller
     {
         private readonly IHealthService _healthService;
