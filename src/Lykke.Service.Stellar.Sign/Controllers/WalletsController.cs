@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Models;
 
@@ -15,15 +16,17 @@ namespace Lykke.Service.Stellar.Sign.Controllers
         }
 
         [HttpPost]
-        public WalletResponse Post()
+        [ProducesResponseType(typeof(WalletResponse), (int)HttpStatusCode.OK)]
+        public IActionResult Post()
         {
             var keyPair = _stellarService.GenerateKeyPair();
 
-            return new WalletResponse
+            return Ok(new WalletResponse
             {
                 PrivateKey = keyPair.Seed,
-                PublicAddress = keyPair.Address
-            };
+                PublicAddress = keyPair.Address,
+                AddressContext = string.Empty
+            });
         }
     }
 }
