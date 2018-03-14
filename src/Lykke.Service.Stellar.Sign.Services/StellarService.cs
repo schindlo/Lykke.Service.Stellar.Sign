@@ -24,7 +24,15 @@ namespace Lykke.Service.Stellar.Sign.Services
 
         public string SignTransaction(string[] seeds, string xdrBase64)
         {
-            var xdr = Convert.FromBase64String(xdrBase64);
+            byte[] xdr;
+            try
+            {
+                xdr = Convert.FromBase64String(xdrBase64);
+            }
+            catch (FormatException ex)
+            {
+                throw new ArgumentException("Invalid base64 encoded transaction XDR", nameof(xdrBase64), ex);
+            }
 
             var reader = new ByteReader(xdr);
             var tx = StellarBase.Generated.Transaction.Decode(reader);

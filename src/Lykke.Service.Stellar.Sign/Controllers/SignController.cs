@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Models;
@@ -30,11 +31,18 @@ namespace Lykke.Service.Stellar.Sign.Controllers
                 return BadRequest(ErrorResponse.Create("Invalid parameter").AddModelError("request.transactionContext", "Must be non empty"));
             }
 
-            var xdrSigned = _stellarService.SignTransaction(request.PrivateKeys, request.TransactionContext);
-            return Ok(new SignResponse
+            try
             {
-                SignedTransaction = xdrSigned
-            });
+                var xdrSigned = _stellarService.SignTransaction(request.PrivateKeys, request.TransactionContext);
+                return Ok(new SignResponse
+                {
+                    SignedTransaction = xdrSigned
+                });
+            }
+            catch (ArgumentException ex) when ("xdrBase64".Equals(ex.ParamName, StringComparison.Ordinal))
+            {
+                return BadRequest(ErrorResponse.Create("Invalid parameter").AddModelError("request.transactionContext", "Must be valid stellar transaction"));
+            }
         }
     }
 }
