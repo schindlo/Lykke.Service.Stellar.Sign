@@ -49,6 +49,7 @@ namespace Lykke.Service.Stellar.Sign.Modules
             builder.RegisterType<StellarService>()
                    .As<IStellarService>()
                    .WithParameter("network", _settings.CurrentValue.NetworkPassphrase)
+                   .WithParameter("depositBaseAddress", _settings.CurrentValue.DepositBaseAddress)
                    .SingleInstance();
 
             builder.Populate(_services);

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Models;
+using Lykke.Service.Stellar.Sign.Core.Domain;
 
 namespace Lykke.Service.Stellar.Sign.Controllers
 {
@@ -19,12 +20,13 @@ namespace Lykke.Service.Stellar.Sign.Controllers
         [ProducesResponseType(typeof(WalletResponse), (int)HttpStatusCode.OK)]
         public IActionResult Post()
         {
-            var keyPair = _stellarService.GenerateKeyPair();
+            var baseAddress = _stellarService.GetDepositBaseAddress();
+            var memoText = _stellarService.GenerateRandomMemoText();
 
             return Ok(new WalletResponse
             {
-                PrivateKey = keyPair.Seed,
-                PublicAddress = keyPair.Address,
+                PrivateKey = Constants.NoPrivateKey,
+                PublicAddress = $"{baseAddress}{Constants.PublicAddressExtension.Separator}{memoText}",
                 AddressContext = string.Empty
             });
         }
