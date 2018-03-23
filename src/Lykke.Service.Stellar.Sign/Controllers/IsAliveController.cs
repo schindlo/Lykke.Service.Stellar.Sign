@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Net;
-using Lykke.Common.Api.Contract.Responses;
-using Lykke.Service.Stellar.Sign.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Lykke.Common.Api.Contract.Responses;
+using Lykke.Service.BlockchainApi.Contract;
+using Lykke.Service.Stellar.Sign.Core.Services;
+using Lykke.Service.Stellar.Sign.Core.Domain;
 
 namespace Lykke.Service.Stellar.Sign.Controllers
 {
@@ -24,7 +26,7 @@ namespace Lykke.Service.Stellar.Sign.Controllers
         /// <returns></returns>
         [HttpGet]
         [SwaggerOperation("IsAlive")]
-        [ProducesResponseType(typeof(IsAliveResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BlockchainIsAliveResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
         public IActionResult Get()
         {
@@ -37,7 +39,7 @@ namespace Lykke.Service.Stellar.Sign.Controllers
             }
 
             // NOTE: Feel free to extend IsAliveResponse, to display job-specific indicators
-            return Ok(new IsAliveResponse
+            return Ok(new BlockchainIsAliveResponse
             {
                 Name = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationName,
                 Version = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion,
@@ -47,6 +49,7 @@ namespace Lykke.Service.Stellar.Sign.Controllers
 #else
                 IsDebug = false,
 #endif
+                ContractVersion = Constants.ContractVersion,
                 IssueIndicators = _healthService.GetHealthIssues()
                     .Select(i => new IsAliveResponse.IssueIndicator
                     {
