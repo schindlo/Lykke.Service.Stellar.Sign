@@ -10,7 +10,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Domain
 
         public class PublicAddressExtension
         {
-            public const char Separator = '?';
+            public const char Separator = '$';
         }
     }
 }
