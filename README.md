@@ -15,7 +15,9 @@ Available configuration variables are documented below. See [developing](https:/
     // The network passphrase used when signing transactions. The following passphrases are currently in use:
     // Test: "Test SDF Network ; September 2015"
     // Live: "Public Global Stellar Network ; September 2015"
-    "NetworkPassphrase": ""
+    "NetworkPassphrase": "",
+    // The public address used as base address during wallet generation
+    "DepositBaseAddress": ""
   },
   "SlackNotifications": {
     "AzureQueue": {
