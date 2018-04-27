@@ -6,6 +6,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Settings
     public class AppSettings
     {
         public StellarSignSettings StellarSignService { get; set; }
+
         public SlackNotificationsSettings SlackNotifications { get; set; }
     }
 }
