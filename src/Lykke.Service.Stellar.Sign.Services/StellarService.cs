@@ -4,13 +4,12 @@ using StellarBase.Generated;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Core.Encoding;
 using Lykke.Service.Stellar.Sign.Core.Domain;
-using System.Text;
 
 namespace Lykke.Service.Stellar.Sign.Services
 {
     public class StellarService : IStellarService
     {
-        private string _depositBaseAddress;
+        private readonly string _depositBaseAddress;
 
         public StellarService(string network, string depositBaseAddress)
         {
