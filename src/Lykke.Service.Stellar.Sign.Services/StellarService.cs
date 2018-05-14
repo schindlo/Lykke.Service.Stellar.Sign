@@ -11,7 +11,8 @@ namespace Lykke.Service.Stellar.Sign.Services
     {
         private readonly string _depositBaseAddress;
 
-        public StellarService(string network, string depositBaseAddress)
+        public StellarService(string network,
+                              string depositBaseAddress)
         {
             Network.CurrentNetwork = network;
             _depositBaseAddress = depositBaseAddress;

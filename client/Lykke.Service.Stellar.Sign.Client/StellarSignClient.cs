@@ -7,7 +7,8 @@ namespace Lykke.Service.Stellar.Sign.Client
     {
         private readonly ILog _log;
 
-        public StellarSignClient(string serviceUrl, ILog log)
+        public StellarSignClient(string serviceUrl,
+                                 ILog log)
         {
             _log = log;
         }
