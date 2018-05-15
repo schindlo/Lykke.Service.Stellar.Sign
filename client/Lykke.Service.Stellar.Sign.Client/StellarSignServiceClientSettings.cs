@@ -1,6 +1,4 @@
-using System;
-
-namespace Lykke.Service.Stellar.Sign.Client 
+﻿namespace Lykke.Service.Stellar.Sign.Client 
 {
     public class StellarSignServiceClientSettings 
     {

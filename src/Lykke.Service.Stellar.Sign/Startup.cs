@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AzureStorage.Tables;
 using Common.Log;
+using JetBrains.Annotations;
 using Lykke.Common.ApiLibrary.Middleware;
 using Lykke.Common.ApiLibrary.Swagger;
 using Lykke.Logs;
@@ -27,6 +28,7 @@ namespace Lykke.Service.Stellar.Sign
         public IConfigurationRoot Configuration { get; }
         public ILog Log { get; private set; }
 
+        [UsedImplicitly]
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -156,6 +158,7 @@ namespace Lykke.Service.Stellar.Sign
             }
             catch (Exception ex)
             {
+                // ReSharper disable once InvertIf
                 if (Log != null)
                 {
                     await Log.WriteFatalErrorAsync(nameof(Startup), nameof(CleanUp), "", ex);

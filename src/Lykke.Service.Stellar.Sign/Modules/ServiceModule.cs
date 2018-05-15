@@ -1,11 +1,9 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Common.Log;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Core.Settings.ServiceSettings;
 using Lykke.Service.Stellar.Sign.Services;
 using Lykke.SettingsReader;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Lykke.Service.Stellar.Sign.Modules
 {
@@ -13,16 +11,12 @@ namespace Lykke.Service.Stellar.Sign.Modules
     {
         private readonly IReloadingManager<StellarSignSettings> _settings;
         private readonly ILog _log;
-        // NOTE: you can remove it if you don't need to use IServiceCollection extensions to register service specific dependencies
-        private readonly IServiceCollection _services;
 
         public ServiceModule(IReloadingManager<StellarSignSettings> settings,
                              ILog log)
         {
             _settings = settings;
             _log = log;
-
-            _services = new ServiceCollection();
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -52,8 +46,6 @@ namespace Lykke.Service.Stellar.Sign.Modules
                    .WithParameter("network", _settings.CurrentValue.NetworkPassphrase)
                    .WithParameter("depositBaseAddress", _settings.CurrentValue.DepositBaseAddress)
                    .SingleInstance();
-
-            builder.Populate(_services);
         }
     }
 }

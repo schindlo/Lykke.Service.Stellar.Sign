@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Common.Log;
+using JetBrains.Annotations;
 
 namespace Lykke.Service.Stellar.Sign.Client
 {
@@ -20,6 +21,7 @@ namespace Lykke.Service.Stellar.Sign.Client
                 .SingleInstance();
         }
 
+        [UsedImplicitly]
         public static void RegisterStellarSignClient(this ContainerBuilder builder, StellarSignServiceClientSettings settings, ILog log)
         {
             builder.RegisterStellarSignClient(settings?.ServiceUrl, log);
