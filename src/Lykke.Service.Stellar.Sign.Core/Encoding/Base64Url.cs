@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 
 namespace Lykke.Service.Stellar.Sign.Core.Encoding
@@ -21,7 +21,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
 		/// <returns>Input byte array converted to a base64ForUrl encoded string</returns>
 		public static string ToBase64ForUrlString(byte[] input)
 		{
-			StringBuilder result = new StringBuilder(Convert.ToBase64String(input).TrimEnd('='));
+			var result = new StringBuilder(Convert.ToBase64String(input).TrimEnd('='));
 
 			result.Replace('+', '-');
 			result.Replace('/', '_');
@@ -39,10 +39,10 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
 		/// <returns>Input base64ForUrl encoded string as the original byte array</returns>
 		public static byte[] FromBase64ForUrlString(string base64ForUrlInput)
 		{
-			int padChars = (base64ForUrlInput.Length%4) == 0 ? 0 : (4 - (base64ForUrlInput.Length%4));
+			var padChars = base64ForUrlInput.Length%4 == 0 ? 0 : 4 - base64ForUrlInput.Length%4;
 
-			StringBuilder result = new StringBuilder(base64ForUrlInput, base64ForUrlInput.Length + padChars);
-			result.Append(String.Empty.PadRight(padChars, '='));
+			var result = new StringBuilder(base64ForUrlInput, base64ForUrlInput.Length + padChars);
+			result.Append(string.Empty.PadRight(padChars, '='));
 
 			result.Replace('-', '+');
 			result.Replace('_', '/');

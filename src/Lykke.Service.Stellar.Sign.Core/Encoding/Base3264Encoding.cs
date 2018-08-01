@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+// ReSharper disable UnusedMember.Global
 
 namespace Lykke.Service.Stellar.Sign.Core.Encoding
 {

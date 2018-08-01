@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+// ReSharper disable UnusedMember.Global
 
 namespace Lykke.Service.Stellar.Sign.Core.Encoding
 {
@@ -38,7 +39,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
             new CharMap('B', "Bb"), new CharMap('C', "Cc"), new CharMap('D', "Dd"), new CharMap('E', "Ee"), new CharMap('F', "Ff"), new CharMap('G', "Gg"),
             new CharMap('H', "Hh"), new CharMap('J', "Jj"), new CharMap('K', "Kk"), new CharMap('M', "Mm"), new CharMap('N', "Nn"), new CharMap('P', "Pp"),
             new CharMap('Q', "Qq"), new CharMap('R', "Rr"), new CharMap('S', "Ss"), new CharMap('T', "Tt"), new CharMap('V', "Vv"), new CharMap('W', "Ww"),
-            new CharMap('X', "Xx"), new CharMap('Y', "Yy"), new CharMap('Z', "Zz"),
+            new CharMap('X', "Xx"), new CharMap('Y', "Yy"), new CharMap('Z', "Zz")
         };
 
         #region CharMap struct
@@ -80,14 +81,16 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         private Dictionary<string, uint> _index;
 
         // alphabets may be used with varying case sensitivity, thus index must not ignore case
-        private static Dictionary<string, Dictionary<string, uint>> _indexes = new Dictionary<string, Dictionary<string, uint>>(2, StringComparer.InvariantCulture);
+        private static readonly Dictionary<string, Dictionary<string, uint>> Indexes = new Dictionary<string, Dictionary<string, uint>>(2, StringComparer.InvariantCulture);
 
+        /// <inheritdoc />
         /// <summary>
         /// Create case insensitive encoder/decoder using the standard base32 alphabet without padding.
         /// White space is not permitted when decoding (not ignored).
         /// </summary>
         public Base32Url() : this(false, false, false, Base32StandardAlphabet) { }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create case insensitive encoder/decoder using the standard base32 alphabet.
         /// White space is not permitted when decoding (not ignored).
@@ -95,6 +98,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         /// <param name="padding">Require/use padding characters?</param>
         public Base32Url(bool padding) : this(padding, false, false, Base32StandardAlphabet) { }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create encoder/decoder using the standard base32 alphabet.
         /// White space is not permitted when decoding (not ignored).
@@ -103,6 +107,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         /// <param name="caseSensitive">Be case sensitive when decoding?</param>
         public Base32Url(bool padding, bool caseSensitive) : this(padding, caseSensitive, false, Base32StandardAlphabet) { }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create encoder/decoder using the standard base32 alphabet.
         /// </summary>
@@ -111,6 +116,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         /// <param name="ignoreWhiteSpaceWhenDecoding">Ignore / allow white space when decoding?</param>
         public Base32Url(bool padding, bool caseSensitive, bool ignoreWhiteSpaceWhenDecoding) : this(padding, caseSensitive, ignoreWhiteSpaceWhenDecoding, Base32StandardAlphabet) { }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create case insensitive encoder/decoder with alternative alphabet and no padding.
         /// White space is not permitted when decoding (not ignored).
@@ -118,6 +124,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         /// <param name="alternateAlphabet">Alphabet to use (such as Base32Url.ZBase32Alphabet)</param>
         public Base32Url(string alternateAlphabet) : this(false, false, false, alternateAlphabet) { }
 
+        /// <inheritdoc />
         /// <summary>
         /// Create the encoder/decoder specifying all options manually.
         /// </summary>
@@ -214,17 +221,17 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
             var buff = new byte[8];
 
             // take input five bytes at a time to chunk it up for encoding
-            for (int i = 0; i < data.Length; i += 5)
+            for (var i = 0; i < data.Length; i += 5)
             {
-                int bytes = Math.Min(data.Length - i, 5);
+                var bytes = Math.Min(data.Length - i, 5);
 
                 // parse five bytes at a time using an 8 byte ulong
                 Array.Copy(emptyBuff, buff, emptyBuff.Length);
                 Array.Copy(data, i, buff, buff.Length - (bytes + 1), bytes);
                 Array.Reverse(buff);
-                ulong val = BitConverter.ToUInt64(buff, 0);
+                var val = BitConverter.ToUInt64(buff, 0);
 
-                for (int bitOffset = ((bytes + 1) * 8) - 5; bitOffset > 3; bitOffset -= 5)
+                for (var bitOffset = (bytes + 1) * 8 - 5; bitOffset > 3; bitOffset -= 5)
                 {
                     result.Append(_alphabet[(int)((val >> bitOffset) & 0x1f)].Encode);
                 }
@@ -232,7 +239,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
 
             if (UsePadding)
             {
-                result.Append(string.Empty.PadRight((result.Length % 8) == 0 ? 0 : (8 - (result.Length % 8)), PaddingChar));
+                result.Append(string.Empty.PadRight(result.Length % 8 == 0 ? 0 : 8 - result.Length % 8, PaddingChar));
             }
 
             return result.ToString();
@@ -267,26 +274,25 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
             var ms = new MemoryStream(Math.Max((int)Math.Ceiling(input.Length * 5 / 8.0), 1));
 
             // take input eight bytes at a time to chunk it up for encoding
-            for (int i = 0; i < input.Length; i += 8)
+            for (var i = 0; i < input.Length; i += 8)
             {
-                int chars = Math.Min(input.Length - i, 8);
+                var chars = Math.Min(input.Length - i, 8);
 
                 ulong val = 0;
 
-                int bytes = (int)Math.Floor(chars * (5 / 8.0));
+                var bytes = (int)Math.Floor(chars * (5 / 8.0));
 
-                for (int charOffset = 0; charOffset < chars; charOffset++)
+                for (var charOffset = 0; charOffset < chars; charOffset++)
                 {
-                    uint cbyte;
-                    if (!_index.TryGetValue(input.Substring(i + charOffset, 1), out cbyte))
+                    if (!_index.TryGetValue(input.Substring(i + charOffset, 1), out var cbyte))
                     {
                         throw new ArgumentException("Invalid character '" + input.Substring(i + charOffset, 1) + "' in base32 string, valid characters are: " + _alphabet);
                     }
 
-                    val |= (((ulong)cbyte) << ((((bytes + 1) * 8) - (charOffset * 5)) - 5));
+                    val |= (ulong)cbyte << ((bytes + 1) * 8 - charOffset * 5 - 5);
                 }
 
-                byte[] buff = BitConverter.GetBytes(val);
+                var buff = BitConverter.GetBytes(val);
                 Array.Reverse(buff);
                 ms.Write(buff, buff.Length - (bytes + 1), bytes);
             }
@@ -298,21 +304,19 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         {
             if (_index != null) return;
 
-            Dictionary<string, uint> cidx;
-
             var indexKey = (IsCaseSensitive ? "S" : "I") +
                 string.Join("", _alphabet.Select(t => t.Encode)) +
                 "_" + string.Join("", _alphabet.SelectMany(t => t.Decode).Select(c => c));
 
-            if (!_indexes.TryGetValue(indexKey, out cidx))
+            if (!Indexes.TryGetValue(indexKey, out var cidx))
             {
-                lock (_indexes)
+                lock (Indexes)
                 {
-                    if (!_indexes.TryGetValue(indexKey, out cidx))
+                    if (!Indexes.TryGetValue(indexKey, out cidx))
                     {
                         var equality = IsCaseSensitive ? StringComparer.InvariantCulture : StringComparer.InvariantCultureIgnoreCase;
                         cidx = new Dictionary<string, uint>(_alphabet.Length, equality);
-                        for (int i = 0; i < _alphabet.Length; i++)
+                        for (var i = 0; i < _alphabet.Length; i++)
                         {
                             foreach (var c in _alphabet[i].Decode.Select(c => c))
                             {
@@ -320,7 +324,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
                             }
 
                         }
-                        _indexes.Add(indexKey, cidx);
+                        Indexes.Add(indexKey, cidx);
                     }
                 }
             }

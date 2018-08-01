@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.PlatformAbstractions;
 
@@ -10,6 +11,7 @@ namespace Lykke.Service.Stellar.Sign
     {
         public static string EnvInfo => Environment.GetEnvironmentVariable("ENV_INFO");
 
+        [UsedImplicitly]
         public static async Task Main(string[] args)
         {
             Console.WriteLine($"{PlatformServices.Default.Application.ApplicationName} version {PlatformServices.Default.Application.ApplicationVersion}");
@@ -24,7 +26,7 @@ namespace Lykke.Service.Stellar.Sign
             {
                 var host = new WebHostBuilder()
                     .UseKestrel()
-                    .UseUrls(new[] { "http://*:5000" })
+                    .UseUrls("http://*:5000")
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseStartup<Startup>()
                     .UseApplicationInsights()

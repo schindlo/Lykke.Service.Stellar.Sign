@@ -4,9 +4,11 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AzureStorage.Tables;
 using Common.Log;
+using JetBrains.Annotations;
 using Lykke.Common.ApiLibrary.Middleware;
 using Lykke.Common.ApiLibrary.Swagger;
 using Lykke.Logs;
+using Lykke.Logs.Slack;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Core.Settings;
 using Lykke.Service.Stellar.Sign.Modules;
@@ -26,6 +28,7 @@ namespace Lykke.Service.Stellar.Sign
         public IConfigurationRoot Configuration { get; }
         public ILog Log { get; private set; }
 
+        [UsedImplicitly]
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -155,6 +158,7 @@ namespace Lykke.Service.Stellar.Sign
             }
             catch (Exception ex)
             {
+                // ReSharper disable once InvertIf
                 if (Log != null)
                 {
                     await Log.WriteFatalErrorAsync(nameof(Startup), nameof(CleanUp), "", ex);
@@ -205,6 +209,25 @@ namespace Lykke.Service.Stellar.Sign
             azureStorageLogger.Start();
 
             aggregateLogger.AddLog(azureStorageLogger);
+
+            var allMessagesSlackLogger = LykkeLogToSlack.Create
+            (
+                slackService,
+                "BlockChainIntegration",
+                // ReSharper disable once RedundantArgumentDefaultValue
+                LogLevel.All
+            );
+
+            aggregateLogger.AddLog(allMessagesSlackLogger);
+
+            var importantMessagesSlackLogger = LykkeLogToSlack.Create
+            (
+                slackService,
+                "BlockChainIntegrationImportantMessages",
+                LogLevel.All ^ LogLevel.Info
+            );
+
+            aggregateLogger.AddLog(importantMessagesSlackLogger);
 
             return aggregateLogger;
         }
