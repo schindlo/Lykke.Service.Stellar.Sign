@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Lykke.Service.Stellar.Sign.Core.Domain.Health;
+using Lykke.Common.Health;
 
 namespace Lykke.Service.Stellar.Sign.Core.Services
 {

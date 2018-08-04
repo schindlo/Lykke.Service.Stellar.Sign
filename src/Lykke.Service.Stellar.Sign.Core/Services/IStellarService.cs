@@ -6,6 +6,7 @@ namespace Lykke.Service.Stellar.Sign.Core.Services
     {
         string GetDepositBaseAddress();
 
+        // ReSharper disable once UnusedMember.Global
         KeyPair GenerateKeyPair();
 
         string GenerateRandomMemoText();
