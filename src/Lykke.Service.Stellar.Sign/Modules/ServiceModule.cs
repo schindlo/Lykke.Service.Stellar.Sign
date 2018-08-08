@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Common.Log;
 using Lykke.Service.Stellar.Sign.Core.Services;
 using Lykke.Service.Stellar.Sign.Core.Settings.ServiceSettings;
 using Lykke.Service.Stellar.Sign.Services;
@@ -10,21 +9,14 @@ namespace Lykke.Service.Stellar.Sign.Modules
     public class ServiceModule : Module
     {
         private readonly IReloadingManager<StellarSignSettings> _settings;
-        private readonly ILog _log;
 
-        public ServiceModule(IReloadingManager<StellarSignSettings> settings,
-                             ILog log)
+        public ServiceModule(IReloadingManager<StellarSignSettings> settings)
         {
             _settings = settings;
-            _log = log;
         }
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterInstance(_log)
-                .As<ILog>()
-                .SingleInstance();
-
             builder.RegisterType<HealthService>()
                 .As<IHealthService>()
                 .SingleInstance();
