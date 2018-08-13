@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Tests", "3. Tests", "{8F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Tools", "4. Tools", "{71734CC9-51E2-4383-A31D-121002B3E28C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykk.Service.KeyGenerator", "src\Lykk.Service.KeyGenerator\Lykk.Service.KeyGenerator.csproj", "{0EC42B6B-5C9D-4FAE-88DD-FB5E040DA553}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykk.Service.Stellar.KeyGenerator", "src\Lykk.Service.KeyGenerator\Lykk.Service.Stellar.KeyGenerator.csproj", "{0EC42B6B-5C9D-4FAE-88DD-FB5E040DA553}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
