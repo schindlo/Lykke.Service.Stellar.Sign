@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lykk.Service.KeyGenerator
+namespace Lykk.Service.Stellar.KeyGenerator
 {
     class Program
     {
