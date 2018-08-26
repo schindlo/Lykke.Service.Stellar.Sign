@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using StellarBase;
 using StellarBase.Generated;
 using Lykke.Service.Stellar.Sign.Core.Services;
@@ -11,7 +12,9 @@ namespace Lykke.Service.Stellar.Sign.Services
     {
         private readonly string _depositBaseAddress;
 
-        public StellarService(string network, string depositBaseAddress)
+        [UsedImplicitly]
+        public StellarService(string network,
+                              string depositBaseAddress)
         {
             Network.CurrentNetwork = network;
             _depositBaseAddress = depositBaseAddress;
@@ -34,8 +37,8 @@ namespace Lykke.Service.Stellar.Sign.Services
 
         public string GenerateRandomMemoText()
         {
-            byte[] guid = Guid.NewGuid().ToByteArray();
-            string memoText = Base3264Encoding.ToZBase32(guid);
+            var guid = Guid.NewGuid().ToByteArray();
+            var memoText = Base3264Encoding.ToZBase32(guid);
             return memoText;
         }
 
@@ -75,7 +78,7 @@ namespace Lykke.Service.Stellar.Sign.Services
             return signedTx;
         }
 
-        private byte[] GetTransactionHash(StellarBase.Generated.Transaction tx)
+        private static byte[] GetTransactionHash(StellarBase.Generated.Transaction tx)
         {
             var writer = new ByteWriter();
 
@@ -94,7 +97,7 @@ namespace Lykke.Service.Stellar.Sign.Services
             return Utilities.Hash(data);
         }
 
-        private string CreateEnvelopeXdrBase64(StellarBase.Generated.Transaction tx, DecoratedSignature signature)
+        private static string CreateEnvelopeXdrBase64(StellarBase.Generated.Transaction tx, DecoratedSignature signature)
         {
             var txEnvelope = new TransactionEnvelope
             {

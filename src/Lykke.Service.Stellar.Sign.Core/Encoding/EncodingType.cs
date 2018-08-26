@@ -1,4 +1,4 @@
-namespace Lykke.Service.Stellar.Sign.Core.Encoding
+﻿namespace Lykke.Service.Stellar.Sign.Core.Encoding
 {
     public enum EncodingType
     {
@@ -7,6 +7,6 @@ namespace Lykke.Service.Stellar.Sign.Core.Encoding
         Base32Url = 3,
         ZBase32 = 4,
         Base32LowProfanity = 5,
-        Base32Crockford = 6,
+        Base32Crockford = 6
     }
 }
